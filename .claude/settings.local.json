@@ -11,7 +11,8 @@
       "Bash(composer show *)",
       "Bash(php artisan *)",
       "Bash(composer update *)",
-      "Read(//c/xampp/php/**)"
+      "Read(//c/xampp/php/**)",
+      "Bash(composer remove *)"
     ],
     "additionalDirectories": [
       "C:\\xampp\\php"

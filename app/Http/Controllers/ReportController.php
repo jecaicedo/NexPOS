@@ -6,8 +6,6 @@ use App\Models\Sale;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\SalesExport;
 
 class ReportController extends Controller
 {
@@ -79,11 +77,8 @@ class ReportController extends Controller
         ));
     }
 
-    public function exportExcel(Request $request)
+    public function exportExcel()
     {
-        $from = $request->get('from', now()->startOfMonth()->toDateString());
-        $to   = $request->get('to', now()->toDateString());
-
-        return Excel::download(new SalesExport($from, $to), "ventas-{$from}-{$to}.xlsx");
+        abort(404);
     }
 }
