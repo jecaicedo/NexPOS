@@ -7,7 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'NexPOS') }} — @yield('title', 'Dashboard')</title>
+    <title>{{ \App\Models\BusinessSetting::get('app_name', 'NexPOS') }} — @yield('title', 'Dashboard')</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -49,8 +50,12 @@
 
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-4 py-[18px] border-b border-white/10 h-14">
-            <div class="w-8 h-8 flex-shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white text-sm shadow-lg">N</div>
-            <span x-show="sidebarOpen" x-cloak class="font-bold text-base tracking-tight text-white whitespace-nowrap">NexPOS</span>
+            <div class="w-8 h-8 flex-shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.268a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .895-.143z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <span x-show="sidebarOpen" x-cloak class="font-bold text-base tracking-tight text-white whitespace-nowrap">{{ \App\Models\BusinessSetting::get('app_name', 'NexPOS') }}</span>
         </div>
 
         {{-- Navigation --}}
@@ -63,10 +68,10 @@
                 ['route' => 'sales.index',      'label' => 'Ventas',           'permission' => 'view sales',      'icon' => 'sales',    'enabled' => true],
                 ['route' => 'products.index',   'label' => 'Inventario',       'permission' => 'view products',   'icon' => 'inventory',    'enabled' => true],
                 ['route' => 'categories.index', 'label' => 'Categorías',       'permission' => 'view categories', 'icon' => 'categories',   'enabled' => true],
-                ['route' => 'customers.index',  'label' => 'Clientes',         'permission' => 'view customers',  'icon' => 'customers',    'enabled' => false],
-                ['route' => 'workshop.index',   'label' => 'Taller',           'permission' => 'view workshop',   'icon' => 'workshop', 'enabled' => true],
-                ['route' => 'employees.index',  'label' => 'Empleados',        'permission' => 'view employees',  'icon' => 'employees',    'enabled' => false],
                 ['route' => 'reports.index',    'label' => 'Reportes',         'permission' => 'view reports',    'icon' => 'reports',  'enabled' => true],
+                ['route' => 'customers.index',  'label' => 'Clientes',         'permission' => 'view customers',  'icon' => 'customers',    'enabled' => false],
+                ['route' => 'workshop.index',   'label' => 'Taller',           'permission' => 'view workshop',   'icon' => 'workshop', 'enabled' => false],
+                ['route' => 'employees.index',  'label' => 'Empleados',        'permission' => 'view employees',  'icon' => 'employees',    'enabled' => false],
                 ['route' => 'users.index',      'label' => 'Usuarios',         'permission' => 'view users',      'icon' => 'users',    'enabled' => false],
                 ['route' => 'settings.index',   'label' => 'Configuración',    'permission' => 'view settings',   'icon' => 'settings', 'enabled' => true],
             ];

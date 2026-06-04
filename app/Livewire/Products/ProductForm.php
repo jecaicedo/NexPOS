@@ -5,12 +5,9 @@ namespace App\Livewire\Products;
 use App\Models\Category;
 use App\Models\Product;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class ProductForm extends Component
 {
-    use WithFileUploads;
-
     public ?int $productId = null;
 
     public string  $name           = '';
@@ -25,8 +22,6 @@ class ProductForm extends Component
     public string  $unit           = 'unidad';
     public bool    $is_active      = true;
     public bool    $track_stock    = true;
-    public mixed   $image          = null;
-    public ?string $existingImage  = null;
 
     public function mount(?int $productId = null): void
     {
@@ -46,7 +41,6 @@ class ProductForm extends Component
             $this->unit           = $product->unit;
             $this->is_active      = $product->is_active;
             $this->track_stock    = $product->track_stock;
-            $this->existingImage  = $product->image;
         }
     }
 
@@ -62,7 +56,6 @@ class ProductForm extends Component
             'stock'          => 'required|integer|min:0',
             'min_stock'      => 'required|integer|min:0',
             'unit'           => 'required|string|max:50',
-            'image'          => 'nullable|image|max:2048',
         ]);
 
         $data = [
@@ -79,10 +72,6 @@ class ProductForm extends Component
             'is_active'      => $this->is_active,
             'track_stock'    => $this->track_stock,
         ];
-
-        if ($this->image) {
-            $data['image'] = $this->image->store('products', 'public');
-        }
 
         if ($this->productId) {
             Product::findOrFail($this->productId)->update($data);

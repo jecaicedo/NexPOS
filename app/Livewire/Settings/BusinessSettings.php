@@ -4,12 +4,9 @@ namespace App\Livewire\Settings;
 
 use App\Models\BusinessSetting;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class BusinessSettings extends Component
 {
-    use WithFileUploads;
-
     public string $business_name    = '';
     public string $business_address = '';
     public string $business_phone   = '';
@@ -23,7 +20,6 @@ class BusinessSettings extends Component
     public string $tax_name         = 'IVA';
     public string $invoice_footer   = '';
     public string $thermal_width    = '80';
-    public mixed  $logo             = null;
 
     public function mount(): void
     {
@@ -52,7 +48,6 @@ class BusinessSettings extends Component
             'business_nit'    => 'nullable|string|max:50',
             'tax_percent'     => 'required|numeric|min:0|max:100',
             'thermal_width'   => 'required|in:58,80',
-            'logo'            => 'nullable|image|max:1024',
         ]);
 
         $settings = [
@@ -71,11 +66,6 @@ class BusinessSettings extends Component
             'thermal_width'    => $this->thermal_width,
         ];
 
-        if ($this->logo) {
-            $path = $this->logo->store('logo', 'public');
-            $settings['business_logo'] = $path;
-        }
-
         BusinessSetting::setMany($settings);
 
         $this->dispatch('toast', type: 'success', message: 'Configuración guardada correctamente.');
@@ -83,8 +73,6 @@ class BusinessSettings extends Component
 
     public function render()
     {
-        return view('livewire.settings.business-settings', [
-            'existingLogo' => BusinessSetting::get('business_logo'),
-        ]);
+        return view('livewire.settings.business-settings');
     }
 }

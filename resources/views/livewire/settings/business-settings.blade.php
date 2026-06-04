@@ -40,18 +40,6 @@
                     </div>
                 </div>
 
-                {{-- Logo --}}
-                <div>
-                    <label class="label">Logo del negocio</label>
-                    @if($existingLogo)
-                        <div class="mb-2"><img src="{{ asset('storage/'.$existingLogo) }}" class="h-16 rounded-lg border border-gray-200 dark:border-gray-700"></div>
-                    @endif
-                    @if($logo)
-                        <div class="mb-2"><img src="{{ $logo->temporaryUrl() }}" class="h-16 rounded-lg border border-gray-200 dark:border-gray-700"></div>
-                    @endif
-                    <input wire:model="logo" type="file" accept="image/*" class="input text-xs">
-                    @error('logo') <p class="error-msg">{{ $message }}</p> @enderror
-                </div>
             </div>
         </div>
 

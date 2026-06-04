@@ -94,23 +94,6 @@
             <textarea wire:model="description" rows="2" class="input resize-none" placeholder="Descripción o notas del producto..."></textarea>
         </div>
 
-        {{-- Imagen --}}
-        <div>
-            <label class="label">Imagen del producto</label>
-            @if($existingImage && !$image)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$existingImage) }}" class="h-20 w-20 object-cover rounded-lg border border-gray-200 dark:border-gray-700">
-                </div>
-            @endif
-            @if($image)
-                <div class="mb-2">
-                    <img src="{{ $image->temporaryUrl() }}" class="h-20 w-20 object-cover rounded-lg border border-gray-200 dark:border-gray-700">
-                </div>
-            @endif
-            <input wire:model="image" type="file" accept="image/*" class="input text-xs">
-            @error('image') <p class="error-msg">{{ $message }}</p> @enderror
-        </div>
-
         {{-- Flags --}}
         <div class="flex gap-6">
             <label class="flex items-center gap-2 cursor-pointer">

@@ -93,7 +93,9 @@ class PosTerminal extends Component
         $key = "p_{$productId}";
 
         if (isset($this->cart[$key])) {
-            $this->cart[$key]['quantity']++;
+            $item = $this->cart[$key];
+            $item['quantity']++;
+            $this->cart[$key] = $item;
         } else {
             $this->cart[$key] = [
                 'product_id' => $productId,
@@ -207,9 +209,13 @@ class PosTerminal extends Component
     public function recalc(): void
     {
         $sub = 0;
-        foreach ($this->cart as &$item) {
-            $item['subtotal'] = round(($item['price'] * $item['quantity']) - $item['discount'], 2);
-            $sub += $item['subtotal'];
+        foreach ($this->cart as $key => $item) {
+            if (! isset($item['price'], $item['quantity'], $item['discount'])) {
+                continue;
+            }
+            $subtotal = max(0, round(($item['price'] * $item['quantity']) - $item['discount'], 2));
+            $this->cart[$key]['subtotal'] = $subtotal;
+            $sub += $subtotal;
         }
 
         $this->subtotal    = max(0, $sub - $this->discount);

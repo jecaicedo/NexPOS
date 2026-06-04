@@ -10,7 +10,8 @@ class BusinessSettingSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            'business_name'     => 'Taller & Repuestos NexPOS',
+            'app_name'          => 'GPCenter',
+            'business_name'     => 'GP Center',
             'business_address'  => 'Calle 10 #25-30, Centro',
             'business_phone'    => '300 000 0000',
             'business_email'    => 'info@nexpos.com',

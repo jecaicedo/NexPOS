@@ -74,12 +74,8 @@
                 <tr wire:key="prod-{{ $product->id }}">
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400 overflow-hidden">
-                                @if($product->image)
-                                    <img src="{{ asset('storage/'.$product->image) }}" class="w-full h-full object-cover">
-                                @else
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                                @endif
+                            <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                             </div>
                             <div>
                                 <p class="font-medium text-gray-900 dark:text-gray-100 text-xs leading-tight">{{ $product->name }}</p>

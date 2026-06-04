@@ -5,7 +5,16 @@
       "Bash(composer --version)",
       "Bash(npm --version)",
       "Read(//c/Users/CND1508MJM/Documents/Personal/**)",
-      "Bash(composer create-project:*)"
+      "Bash(composer create-project:*)",
+      "Bash(del \"c:\\\\Users\\\\HP\\\\Documents\\\\Personal\\\\NexPOS\\\\resources\\\\views\\\\components\\\\nexpos-logo.blade.php\")",
+      "Bash(grep -rn \"public mixed.*=\\\\|public.*\\\\$.*= null\" app/Livewire/ --include=\"*.php\")",
+      "Bash(composer show *)",
+      "Bash(php artisan *)",
+      "Bash(composer update *)",
+      "Read(//c/xampp/php/**)"
+    ],
+    "additionalDirectories": [
+      "C:\\xampp\\php"
     ]
   }
 }

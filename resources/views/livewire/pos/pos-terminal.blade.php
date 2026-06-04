@@ -86,8 +86,15 @@
                             </div>
                             <div class="flex items-center gap-2 mt-2">
                                 <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                                    <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] - 1 }})"
-                                            class="px-2.5 py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm">−</button>
+                                    @if($item['quantity'] <= 1)
+                                        <button wire:click="removeItem('{{ $key }}')"
+                                                class="px-2.5 py-1 text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    @else
+                                        <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] - 1 }})"
+                                                class="px-2.5 py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm">−</button>
+                                    @endif
                                     <span class="px-3 text-sm font-semibold text-gray-900 dark:text-gray-100 min-w-[2rem] text-center">{{ $item['quantity'] }}</span>
                                     <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] + 1 }})"
                                             class="px-2.5 py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm">+</button>
@@ -134,49 +141,6 @@
 
     {{-- ── RIGHT: Customer + Payment ── --}}
     <div class="w-full lg:w-80 flex flex-col gap-4">
-
-        {{-- Customer --}}
-        <div class="card">
-            <div class="card-header">
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100">Cliente</h3>
-                @if($selectedCustomer && !($selectedCustomer['id'] === \App\Models\Customer::where('is_generic',true)->value('id')))
-                <button wire:click="clearCustomer" class="text-xs text-gray-400 hover:text-gray-600">Genérico</button>
-                @endif
-            </div>
-            <div class="card-body py-3">
-                @if($selectedCustomer)
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600 text-xs font-bold uppercase">
-                        {{ mb_substr($selectedCustomer['name'], 0, 1) }}
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $selectedCustomer['name'] }}</p>
-                        @if(!empty($selectedCustomer['document_number']))
-                            <p class="text-xs text-gray-400">{{ $selectedCustomer['document_number'] }}</p>
-                        @endif
-                    </div>
-                </div>
-                @endif
-
-                <div class="relative mt-3">
-                    <input wire:model.live.debounce.300ms="customerSearch"
-                           type="text"
-                           class="input text-sm"
-                           placeholder="Buscar cliente...">
-                    @if(count($customerResults))
-                    <div class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl z-50 max-h-48 overflow-y-auto">
-                        @foreach($customerResults as $cust)
-                        <button wire:click="selectCustomer({{ $cust['id'] }})"
-                                class="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors">
-                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $cust['name'] }}</p>
-                            <p class="text-xs text-gray-400">{{ $cust['document_type'] }}: {{ $cust['document_number'] ?? '—' }}</p>
-                        </button>
-                        @endforeach
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
 
         {{-- Sale Type --}}
         <div class="card">

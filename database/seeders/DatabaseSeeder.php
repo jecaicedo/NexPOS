@@ -9,13 +9,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            GPCenterSeeder::class,
             RolesAndPermissionsSeeder::class,
             BusinessSettingSeeder::class,
             UserSeeder::class,
-            CategorySeeder::class,
-            ProductSeeder::class,
             CustomerSeeder::class,
-            EmployeeSeeder::class,
+            // CategorySeeder::class,
+            // ProductSeeder::class,
+            // EmployeeSeeder::class,
         ]);
     }
 }
