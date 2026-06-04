@@ -58,31 +58,60 @@
 
             @php
             $nav = [
-                ['route' => 'dashboard',       'label' => 'Dashboard',        'permission' => 'view dashboard',  'icon' => 'dashboard'],
-                ['route' => 'pos.index',        'label' => 'Punto de Venta',   'permission' => 'create sales',    'icon' => 'pos'],
-                ['route' => 'sales.index',      'label' => 'Ventas',           'permission' => 'view sales',      'icon' => 'sales'],
-                ['route' => 'products.index',   'label' => 'Inventario',       'permission' => 'view products',   'icon' => 'inventory'],
-                ['route' => 'categories.index', 'label' => 'Categorías',       'permission' => 'view categories', 'icon' => 'categories'],
-                ['route' => 'customers.index',  'label' => 'Clientes',         'permission' => 'view customers',  'icon' => 'customers'],
-                ['route' => 'workshop.index',   'label' => 'Taller',           'permission' => 'view workshop',   'icon' => 'workshop'],
-                ['route' => 'employees.index',  'label' => 'Empleados',        'permission' => 'view employees',  'icon' => 'employees'],
-                ['route' => 'reports.index',    'label' => 'Reportes',         'permission' => 'view reports',    'icon' => 'reports'],
-                ['route' => 'users.index',      'label' => 'Usuarios',         'permission' => 'view users',      'icon' => 'users'],
-                ['route' => 'settings.index',   'label' => 'Configuración',    'permission' => 'view settings',   'icon' => 'settings'],
+                ['route' => 'dashboard',       'label' => 'Dashboard',        'permission' => 'view dashboard',  'icon' => 'dashboard', 'enabled' => true],
+                ['route' => 'pos.index',        'label' => 'Punto de Venta',   'permission' => 'create sales',    'icon' => 'pos',  'enabled' => true],
+                ['route' => 'sales.index',      'label' => 'Ventas',           'permission' => 'view sales',      'icon' => 'sales',    'enabled' => true],
+                ['route' => 'products.index',   'label' => 'Inventario',       'permission' => 'view products',   'icon' => 'inventory',    'enabled' => true],
+                ['route' => 'categories.index', 'label' => 'Categorías',       'permission' => 'view categories', 'icon' => 'categories',   'enabled' => true],
+                ['route' => 'customers.index',  'label' => 'Clientes',         'permission' => 'view customers',  'icon' => 'customers',    'enabled' => false],
+                ['route' => 'workshop.index',   'label' => 'Taller',           'permission' => 'view workshop',   'icon' => 'workshop', 'enabled' => true],
+                ['route' => 'employees.index',  'label' => 'Empleados',        'permission' => 'view employees',  'icon' => 'employees',    'enabled' => false],
+                ['route' => 'reports.index',    'label' => 'Reportes',         'permission' => 'view reports',    'icon' => 'reports',  'enabled' => true],
+                ['route' => 'users.index',      'label' => 'Usuarios',         'permission' => 'view users',      'icon' => 'users',    'enabled' => false],
+                ['route' => 'settings.index',   'label' => 'Configuración',    'permission' => 'view settings',   'icon' => 'settings', 'enabled' => true],
             ];
             @endphp
 
             @foreach($nav as $item)
+
                 @can($item['permission'])
-                @php $isActive = request()->routeIs(str_replace('index', '*', $item['route'])); @endphp
-                <a href="{{ route($item['route']) }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group
-                          {{ $isActive ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-400 hover:text-white hover:bg-white/10' }}">
-                    @include('components.nav-icon', ['icon' => $item['icon'], 'active' => $isActive])
-                    <span x-show="sidebarOpen" x-cloak class="whitespace-nowrap">{{ $item['label'] }}</span>
+
+                @php
+                    $isActive = request()->routeIs(str_replace('index', '*', $item['route']));
+                    $isEnabled = $item['enabled'];
+                @endphp
+
+                <a href="{{ $isEnabled ? route($item['route']) : '#' }}"
+                @if(!$isEnabled) onclick="return false;" @endif
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group
+
+                {{ !$isEnabled
+                        ? 'opacity-40 cursor-not-allowed text-gray-500 bg-white/5'
+                        : ($isActive
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : 'text-gray-400 hover:text-white hover:bg-white/10')
+                }}">
+
+                    @include('components.nav-icon', [
+                        'icon' => $item['icon'],
+                        'active' => $isActive
+                    ])
+
+                    <span x-show="sidebarOpen" x-cloak class="whitespace-nowrap flex items-center gap-2">
+                        {{ $item['label'] }}
+
+                        @if(!$isEnabled)
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-700 text-gray-300">
+                                Próximamente
+                            </span>
+                        @endif
+                    </span>
                 </a>
+
                 @endcan
+
             @endforeach
+
         </nav>
 
         {{-- User footer --}}
