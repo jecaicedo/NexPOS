@@ -4,10 +4,14 @@ namespace App\Livewire\Products;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ProductForm extends Component
 {
+    use WithFileUploads;
+
     public ?int $productId = null;
 
     public string  $name           = '';
@@ -22,6 +26,9 @@ class ProductForm extends Component
     public string  $unit           = 'unidad';
     public bool    $is_active      = true;
     public bool    $track_stock    = true;
+
+    public $photo = null;
+    public ?string $existingImage = null;
 
     public function mount(?int $productId = null): void
     {
@@ -41,7 +48,14 @@ class ProductForm extends Component
             $this->unit           = $product->unit;
             $this->is_active      = $product->is_active;
             $this->track_stock    = $product->track_stock;
+            $this->existingImage  = $product->image;
         }
+    }
+
+    public function removePhoto(): void
+    {
+        $this->photo = null;
+        $this->existingImage = null;
     }
 
     public function save(): void
@@ -56,6 +70,7 @@ class ProductForm extends Component
             'stock'          => 'required|integer|min:0',
             'min_stock'      => 'required|integer|min:0',
             'unit'           => 'required|string|max:50',
+            'photo'          => 'nullable|image|max:2048',
         ]);
 
         $data = [
@@ -73,10 +88,22 @@ class ProductForm extends Component
             'track_stock'    => $this->track_stock,
         ];
 
+        $previousImage = $this->productId ? Product::findOrFail($this->productId)->image : null;
+
+        if ($this->photo) {
+            $data['image'] = $this->photo->store('products', 'public');
+        } elseif ($this->productId && $this->existingImage === null) {
+            $data['image'] = null;
+        }
+
         if ($this->productId) {
             Product::findOrFail($this->productId)->update($data);
         } else {
             Product::create($data);
+        }
+
+        if ($previousImage && isset($data['image']) && $data['image'] !== $previousImage) {
+            Storage::disk('public')->delete($previousImage);
         }
 
         $this->dispatch('product-saved');

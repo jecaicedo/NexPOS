@@ -9,6 +9,30 @@
     </div>
 
     <form wire:submit="save" class="space-y-4">
+        {{-- Foto del producto --}}
+        <div>
+            <label class="label">Foto del producto</label>
+            <div class="flex items-center gap-4">
+                <div class="w-20 h-20 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden flex items-center justify-center">
+                    @if($photo)
+                        <img src="{{ $photo->temporaryUrl() }}" class="w-full h-full object-cover">
+                    @elseif($existingImage)
+                        <img src="{{ asset('storage/' . $existingImage) }}" class="w-full h-full object-cover">
+                    @else
+                        <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    @endif
+                </div>
+                <div class="flex-1">
+                    <input type="file" wire:model="photo" accept="image/*" class="input text-xs">
+                    <div wire:loading wire:target="photo" class="text-xs text-gray-400 mt-1">Cargando imagen...</div>
+                    @if($photo || $existingImage)
+                        <button type="button" wire:click="removePhoto" class="text-xs text-red-500 hover:underline mt-1">Quitar foto</button>
+                    @endif
+                    @error('photo') <p class="error-msg">{{ $message }}</p> @enderror
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {{-- Nombre --}}
             <div class="md:col-span-2">

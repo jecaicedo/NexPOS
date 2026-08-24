@@ -1,4 +1,4 @@
-<div>
+<div x-data="{ lightbox: null }" @keydown.escape.window="lightbox = null">
     {{-- Header --}}
     <div class="page-header">
         <div>
@@ -74,8 +74,11 @@
                 <tr wire:key="prod-{{ $product->id }}">
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            <div
+                                class="w-9 h-9 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden flex items-center justify-center text-gray-400 {{ $product->image ? 'cursor-zoom-in' : '' }}"
+                                @if($product->image) @click="lightbox = { src: '{{ $product->image_url }}', name: @js($product->name) }" @endif
+                            >
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <p class="font-medium text-gray-900 dark:text-gray-100 text-xs leading-tight">{{ $product->name }}</p>
@@ -217,4 +220,17 @@
         </div>
     </div>
     @endif
+
+    {{-- Image Lightbox --}}
+    <div x-show="lightbox" x-cloak x-transition.opacity class="modal-overlay" @click.self="lightbox = null" style="display:none">
+        <div class="modal modal-md overflow-hidden" @click.stop>
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="lightbox?.name"></p>
+                <button @click="lightbox = null" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <img :src="lightbox?.src" :alt="lightbox?.name" class="w-full max-h-[70vh] object-contain bg-gray-50 dark:bg-gray-950">
+        </div>
+    </div>
 </div>
